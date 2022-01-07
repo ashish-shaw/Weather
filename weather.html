@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      text-align: center;
+      font-size: 20px;
+      background-color: chocolate;
+    }
+    #city {
+      width: 25%;
+    }
+    button {
+      background-color: black;
+      color: cornflowerblue;
+    }
+    h1 {
+      font-size: 60px;
+    }
+    #status {
+      font-weight: bolder;
+      font-size: 30px;
+    }
+  </style>
+  <body>
+    <h1>Weather</h1>
+
+    <input type="text" id="city" placeholder="Enter city name" />
+    <button onclick="getWeather()">Search</button>
+    <div id="status"></div>
+  </body>
+</html>
+
+<script>
+  let key = "cba8776efe5830bf2890338b5f923c09";
+  let container = document.getElementById("status");
+
+  async function getWeather() {
+    try {
+      let city = document.getElementById("city").value;
+
+      let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`;
+
+      let res = await fetch(url);
+      let data = await res.json();
+      console.log(data);
+
+      let tempe = data.main.temp;
+
+      tempe = Math.round(tempe - 273);
+      console.log("temp: " + tempe + "C");
+
+      let name = document.createElement("p");
+      name.innerHTML = "City :- " + data.name;
+
+      let temperature = document.createElement("p");
+      temperature.innerHTML =
+        "Temperature :- " + " " + tempe + " Degree Celsius";
+
+      let weather = document.createElement("p");
+      weather.innerHTML = "Status :- " + data.weather[0].main;
+
+      container.append(name, temperature, weather);
+    } catch (err) {
+      console.log("err:", err);
+    }
+  }
+
+  getWeather();
+</script>
